@@ -28,9 +28,11 @@ module PG
     PG::Connection.singleton_class.prepend Connection
 
     if defined?(ActiveRecord)
-      require_relative "aws_rds_iam/active_record_postgresql_database_tasks"
+      ActiveSupport.on_load(:active_record_postgresqladapter) do
+        require_relative "aws_rds_iam/active_record_postgresql_database_tasks"
 
-      ActiveRecord::Tasks::PostgreSQLDatabaseTasks.prepend ActiveRecordPostgreSQLDatabaseTasks
+        ActiveRecord::Tasks::PostgreSQLDatabaseTasks.prepend ActiveRecordPostgreSQLDatabaseTasks
+      end
     end
   end
 end
